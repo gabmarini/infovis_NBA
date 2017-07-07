@@ -114,6 +114,10 @@
     uStates.draw("#statesvg", states, tooltipHtml);
   })
 
+
+  d3.select('body').on('keydown', function(){
+    alert(d3.event.keyCode)
+  })
   
   d3.select(self.frameElement).style("height", "600px"); 
 </script>

@@ -89,6 +89,10 @@
 		function mouseOut(){
 			d3.select("#tooltip").transition().duration(500).style("opacity", 0);      
 		}
+
+		function scoreKey(){
+
+		}
 		
 		d3.select(id).selectAll(".state")
 			.data(uStatePaths)
@@ -106,11 +110,11 @@
 			.style("fill",function(d){ 
 				var score = 0
 				try{
-					score = data[d.id].att_score
+					score = data[d.id].plm_score
 				} catch(err) {
 					score = 0
 				}
-				return colorize(minScore(data,'att_score'), maxScore(data,'att_score'), score); 
+				return colorize(minScore(data,'plm_score'), maxScore(data,'plm_score'), score); 
 			});
 		
 	}
