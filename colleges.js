@@ -4,71 +4,73 @@
 
 	colleges.draw = function(state, score_type){
 		d3.json("http://infovis-nba.herokuapp.com/colleges/" + state, function(data){
-			config.actual_state = state
 			college = data.sort(function(a,b){
 				return d3.ascending(a[score_type],b[score_type])
 			})
-		var svg = d3.select("#bar-state"),
-			margin = {top: 15, right: 15, bottom: 15, left: 300},
-			width = 950 - margin.right - margin.left,
-			height = 600 - margin.top - margin.bottom;		    
-		
-		var x = d3.scaleLinear().range([0, width]);
-		var y = d3.scaleBand().range([height, 0]);
+			config.actual_state = state
 
-		svg.selectAll("*").remove();
+			var svg = d3.select("#bar-state"),
+				margin = {top: 15, right: 15, bottom: 15, left: 300},
+				width = 950 - margin.right - margin.left,
+				height = 600 - margin.top - margin.bottom;		    
+			
+			var x = d3.scaleLinear().range([0, width]);
+			var y = d3.scaleBand().range([height, 0]);
 
-		var g = svg.append("g") 
-		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			svg.selectAll("*").remove();
 
-		x.domain([0, d3.max(college, function(d) { return d[score_type]; })]);
-    	y.domain(college.map(function(d) { return d.name; })).padding(0.2);
+			var g = svg.append("g") 
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    	g.append("g")
-        .attr("class", "x axis")
-       	.attr("transform", "translate(0," + height + ")")
-      	.call(d3.axisBottom(x).ticks(5).tickFormat(function(d) { return parseInt(d); }).tickSizeInner([-height]));
+			x.domain([0, d3.max(college, function(d) { return d[score_type]; })]);
+	    	y.domain(college.map(function(d) { return d.name; })).padding(0.2);
 
-      	g.append("g")
-        .attr("class", "y axis")
-        .call(d3.axisLeft(y));
+	    	g.append("g")
+	        .attr("class", "x axis")
+	       	.attr("transform", "translate(0," + height + ")")
+	      	.call(d3.axisBottom(x).ticks(5).tickFormat(function(d) { return parseInt(d); }).tickSizeInner([-height]));
 
-        g.selectAll(".bar")
-        .data(college)
-      	.enter()
-      	.append("rect")
-        .attr("class", "bar")
-        .attr("x", 0)
-        .attr("height", y.bandwidth())
-        .attr("y", function(d) { return y(d.name); })
-        .style('fill', config[score_type])
-        .transition()
-        .duration(3000)
-        .attr("width", function(d) { return x(d[score_type]); })
+	      	g.append("g")
+	        .attr("class", "y axis")
+	        .call(d3.axisLeft(y));
 
-		g.selectAll('.label')
-		.data(college)
-		.enter()
-		.append('text')
-		.text(function(d){ 
-			var text = d3.format(".2f")(d[score_type]) == 0.00 ? '' : d3.format(".2f")(d[score_type])
-			return text
-		})
-		.attr('y', function(d,i){ 
-			return y(d.name) + margin.top + d3.select('rect').node().getBBox().height/2 - 8; 
-		})
-		.transition()
-		.duration(3000)
-		.attr('x', function(d) {
-			var pos = x(d[score_type]) - d3.select(this).node().getBBox().width - 5
-			if (pos <= 1){
-				d3.select(this).text('')
-			}
-			return pos; 
-		})
-		.style('fill', '#FFFFFF')
+	        g.selectAll(".bar")
+	        .data(college)
+	      	.enter()
+	      	.append("rect")
+	        .attr("class", "bar")
+	        .attr("x", 0)
+	        .attr("height", y.bandwidth())
+	        .attr("y", function(d) { return y(d.name); })
+	        .style('fill', config[score_type])
+	        .transition()
+	        .duration(3000)
+	        .attr("width", function(d) { return x(d[score_type]); })
+
+			g.selectAll('.label')
+			.data(college)
+			.enter()
+			.append('text')
+			.text(function(d){ 
+				var text = d3.format(".2f")(d[score_type]) == 0.00 ? '' : d3.format(".2f")(d[score_type])
+				return text
+			})
+			.attr('y', function(d,i){ 
+				return y(d.name) + margin.top + d3.select('rect').node().getBBox().height/2 - 8; 
+			})
+			.transition()
+			.duration(3000)
+			.attr('x', function(d) {
+				var pos = x(d[score_type]) - d3.select(this).node().getBBox().width - 5
+				if (pos <= 1){
+					d3.select(this).text('')
+				}
+				return pos; 
+			})
+			.style('fill', '#FFFFFF')
 
         })
+
 
 
 	}

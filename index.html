@@ -66,7 +66,7 @@
 }
 
 .tick text{
-  font-size: 11px;
+  font-size: 11.5px;
 }
 .x path {
   display: none;
@@ -117,40 +117,58 @@
 
 
   d3.select('body').on('keydown', function(){
-      console.log(d3.event.keyCode)
     if(d3.event.keyCode == 49){
       uStates.redraw("#statesvg", states, tooltipHtml, 'plm_score')
-      colleges.draw(config.actual_state, 'plm_score')
+      if(config.actual_state != undefined)
+        colleges.draw(config.actual_state, 'plm_score')
+      //config.score_type = 'plm_score'
     }
     if(d3.event.keyCode == 50){
       uStates.redraw("#statesvg", states, tooltipHtml, 'aro_score')
-      colleges.draw(config.actual_state, 'aro_score')
-
+      if(config.actual_state != undefined)
+        colleges.draw(config.actual_state, 'aro_score')
+      //config.score_type = 'aro_score'
     }
     if(d3.event.keyCode == 51){
       uStates.redraw("#statesvg", states, tooltipHtml, 'two_score')
-      colleges.draw(config.actual_state, 'two_score')
+      if(config.actual_state != undefined)
+        colleges.draw(config.actual_state, 'two_score')
+      //config.score_type = 'two_score'
     }
     if(d3.event.keyCode == 52){
       uStates.redraw("#statesvg", states, tooltipHtml, 'thr_score')
-      colleges.draw(config.actual_state, 'thr_score')
+      if(config.actual_state != undefined)
+        colleges.draw(config.actual_state, 'thr_score')
+      //config.score_type = 'thr_score'
     }
     if(d3.event.keyCode == 53){
       uStates.redraw("#statesvg", states, tooltipHtml, 'def_score')
-      colleges.draw(config.actual_state, 'def_score')
+      if(config.actual_state != undefined)
+        colleges.draw(config.actual_state, 'def_score')
+      //config.score_type = 'def_score'
     }
     if(d3.event.keyCode == 54){
       uStates.redraw("#statesvg", states, tooltipHtml, 'att_score')
-      colleges.draw(config.actual_state, 'att_score')
+      if(config.actual_state != undefined)
+        colleges.draw(config.actual_state, 'att_score')
+      //config.score_type = 'att_score'
     }
     if(d3.event.keyCode == 55){
       uStates.redraw("#statesvg", states, tooltipHtml, 'reb_score')
-      colleges.draw(config.actual_state, 'reb_score')
+      if(config.actual_state != undefined)
+        colleges.draw(config.actual_state, 'reb_score')
+      //config.score_type = 'reb_score'
     }
     if(d3.event.keyCode == 56){
       uStates.redraw("#statesvg", states, tooltipHtml, 'score')
-      colleges.draw(config.actual_state, 'score')
+      if(config.actual_state != undefined)
+        colleges.draw(config.actual_state, 'score')
+      //config.score_type = 'score'
     }
+    if([49,50,51,52,53,54,55,56].indexOf(d3.event.keyCode) > -1){
+      config.last_pressed = d3.event.keyCode
+    }
+
     
   })
   

@@ -76,7 +76,7 @@
 	uStates.redraw = function(id, data, toolTip, score_type){
 
 		function colorize(min, max, value){
-			var scale = d3.scaleLinear().domain([min, max]).range(['#eeeeee', config[score_type]]);  
+			var scale = d3.scaleLinear().domain([min, max]).range(['#ffffff', config[score_type]]);  
 		return scale(value)
 	}
 
@@ -114,7 +114,7 @@
 	uStates.draw = function(id, data, toolTip, score_type){		
 
 		function colorize(min, max, value){
-			var scale = d3.scaleLinear().domain([min, max]).range(['#eeeeee', config[score_type]]);  
+			var scale = d3.scaleLinear().domain([min, max]).range(['#ffffff', config[score_type]]);  
 			return scale(value)
 		}
 
