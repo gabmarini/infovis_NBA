@@ -53,10 +53,10 @@
     width: 50%;
     height: 50%;
   }
-
+  /*
   .bar {
   fill: #ee5555;
-}
+  }*/
 .axis path,
 .axis line {
   fill: none;
@@ -87,6 +87,7 @@
 <div class="test">
   <svg viewBox="0 0 950 600" width="100%" height="100%" id="bar-state"></svg> <!-- svg to hold the map. -->
 </div>
+<script src="config.js"></script>
 <script src="colleges.js"></script>
 <script src="uStates.js"></script> <!-- creates uStates. -->
 <script src="http://d3js.org/d3.v4.min.js"></script>
@@ -111,12 +112,46 @@
     data.forEach(function(state,i){
       states[state.state_abbreviation] = state
     })
-    uStates.draw("#statesvg", states, tooltipHtml);
+    uStates.draw("#statesvg", states, tooltipHtml, 'score');
   })
 
 
   d3.select('body').on('keydown', function(){
-    alert(d3.event.keyCode)
+      console.log(d3.event.keyCode)
+    if(d3.event.keyCode == 49){
+      uStates.redraw("#statesvg", states, tooltipHtml, 'plm_score')
+      colleges.draw(config.actual_state, 'plm_score')
+    }
+    if(d3.event.keyCode == 50){
+      uStates.redraw("#statesvg", states, tooltipHtml, 'aro_score')
+      colleges.draw(config.actual_state, 'aro_score')
+
+    }
+    if(d3.event.keyCode == 51){
+      uStates.redraw("#statesvg", states, tooltipHtml, 'two_score')
+      colleges.draw(config.actual_state, 'two_score')
+    }
+    if(d3.event.keyCode == 52){
+      uStates.redraw("#statesvg", states, tooltipHtml, 'thr_score')
+      colleges.draw(config.actual_state, 'thr_score')
+    }
+    if(d3.event.keyCode == 53){
+      uStates.redraw("#statesvg", states, tooltipHtml, 'def_score')
+      colleges.draw(config.actual_state, 'def_score')
+    }
+    if(d3.event.keyCode == 54){
+      uStates.redraw("#statesvg", states, tooltipHtml, 'att_score')
+      colleges.draw(config.actual_state, 'att_score')
+    }
+    if(d3.event.keyCode == 55){
+      uStates.redraw("#statesvg", states, tooltipHtml, 'reb_score')
+      colleges.draw(config.actual_state, 'reb_score')
+    }
+    if(d3.event.keyCode == 56){
+      uStates.redraw("#statesvg", states, tooltipHtml, 'score')
+      colleges.draw(config.actual_state, 'score')
+    }
+    
   })
   
   d3.select(self.frameElement).style("height", "600px"); 

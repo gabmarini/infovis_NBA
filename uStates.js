@@ -71,12 +71,14 @@
 		return d3.min(scores)
 	}
 
-	function colorize(min, max, value){
-		var scale = d3.scaleLinear().domain([min, max]).range(['#eeeeee', '#ee5555']);  
+	
+
+	uStates.redraw = function(id, data, toolTip, score_type){
+
+		function colorize(min, max, value){
+			var scale = d3.scaleLinear().domain([min, max]).range(['#eeeeee', config[score_type]]);  
 		return scale(value)
 	}
-		
-	uStates.draw = function(id, data, toolTip){		
 
 		function mouseOver(d){
 			d3.select("#tooltip").transition().duration(200).style("opacity", .9);      
@@ -90,8 +92,42 @@
 			d3.select("#tooltip").transition().duration(500).style("opacity", 0);      
 		}
 
-		function scoreKey(){
+		d3.select(id).selectAll(".state")
+		.on("mouseover", mouseOver)
+		.on("mouseout", mouseOut)
+		.on('click', function(){colleges.draw(d3.select(this).attr('state'), score_type)})
+		.transition()
+		.duration(750)
+		.style('fill','white')
+		.style("fill",function(d){ 
+			var score = 0
+			try{
+				score = data[d.id][score_type]
+			} catch(err) {
+				score = 0
+			}
+			return colorize(minScore(data,score_type), maxScore(data,score_type), score); 
+		});
 
+	}
+		
+	uStates.draw = function(id, data, toolTip, score_type){		
+
+		function colorize(min, max, value){
+			var scale = d3.scaleLinear().domain([min, max]).range(['#eeeeee', config[score_type]]);  
+			return scale(value)
+		}
+
+		function mouseOver(d){
+			d3.select("#tooltip").transition().duration(200).style("opacity", .9);      
+			
+			d3.select("#tooltip").html(toolTip(d.n, data[d.id]))  
+				.style("left", (d3.event.pageX) + "px")     
+				.style("top", (d3.event.pageY - 28) + "px");
+		}
+		
+		function mouseOut(){
+			d3.select("#tooltip").transition().duration(500).style("opacity", 0);      
 		}
 		
 		d3.select(id).selectAll(".state")
@@ -104,17 +140,17 @@
 			.style('fill','white')
 			.on("mouseover", mouseOver)
 			.on("mouseout", mouseOut)
-			.on('click', function(){colleges.draw(d3.select(this).attr('state'))})
+			.on('click', function(){colleges.draw(d3.select(this).attr('state'),score_type)})
 			.transition()
 			.duration(3000)
 			.style("fill",function(d){ 
 				var score = 0
 				try{
-					score = data[d.id].plm_score
+					score = data[d.id][score_type]
 				} catch(err) {
 					score = 0
 				}
-				return colorize(minScore(data,'plm_score'), maxScore(data,'plm_score'), score); 
+				return colorize(minScore(data,score_type), maxScore(data,score_type), score); 
 			});
 		
 	}
