@@ -72,7 +72,7 @@
 	}
 
 	function colorize(min, max, value){
-		var scale = d3.scaleLinear().domain([min, max]).range(['#000000', '#cc3333']);  
+		var scale = d3.scaleLinear().domain([min, max]).range(['#eeeeee', '#ee5555']);  
 		return scale(value)
 	}
 		
@@ -102,7 +102,7 @@
 			.on("mouseout", mouseOut)
 			.on('click', function(){colleges.draw(d3.select(this).attr('state'))})
 			.transition()
-			.duration(5000)
+			.duration(3000)
 			.style("fill",function(d){ 
 				var score = 0
 				try{

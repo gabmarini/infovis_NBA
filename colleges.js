@@ -87,23 +87,23 @@
 				return d3.ascending(a.score,b.score)
 			})
 		var svg = d3.select("#bar-state"),
-			margin = {top: 20, right: 20, bottom: 30, left: 1500},
-			width = 1000 //+svg.attr("width") - margin.left - margin.right,
-			height = 400 //+svg.attr("height") - margin.top - margin.bottom;		    
+			margin = {top: 15, right: 10, bottom: 15, left: 300},
+			width = 950 - margin.right - margin.left,
+			height = 600 - margin.top - margin.bottom;		    
 		
 		var x = d3.scaleLinear().range([0, width]);
 		var y = d3.scaleBand().range([height, 0]);
 
-		var g = svg.append("g")
+		var g = svg.append("g") 
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 		x.domain([0, d3.max(college, function(d) { return d.score; })]);
-    	y.domain(college.map(function(d) { return d.name; })).padding(0.1);
+    	y.domain(college.map(function(d) { return d.name; })).padding(0.2);
 
     	g.append("g")
         .attr("class", "x axis")
-       	.attr("transform", "translate(0," + 400 + ")")
-      	.call(d3.axisBottom(x).ticks(5).tickFormat(function(d) { console.log(d); return parseInt(d / 100); }).tickSizeInner([-400]));
+       	.attr("transform", "translate(0," + height + ")")
+      	.call(d3.axisBottom(x).ticks(5).tickFormat(function(d) { return parseInt(d); }).tickSizeInner([-height]));
 
       	g.append("g")
         .attr("class", "y axis")
@@ -119,6 +119,20 @@
         .transition()
         .duration(3000)
         .attr("width", function(d) { return x(d.score); })
+
+        //svg.selectAll('.bar')
+		//.data(college)
+		//.enter()
+		g.selectAll('.label')
+		.data(college)
+		.enter()
+		.append('text')
+		.text(function(d){ return d3.format(".2f")(d.score); })
+		.attr('y', function(d,i){ console.log(y(d.name) + d3.select('rect'),d3.select('rect').node().getBBox().height /2 );return y(d.name) + margin.top + d3.select('rect').node().getBBox().height/2 - 8; })
+		.transition()
+		.duration(3000)
+		.attr('x', function(d) {return x(d.score)-60; })
+		.style('fill', '#FFFFFF')
 
         })
 
