@@ -93,9 +93,14 @@
 		}
 
 		d3.select(id).selectAll(".state")
+		.data(uStatePaths)
 		.on("mouseover", mouseOver)
 		.on("mouseout", mouseOut)
-		.on('click', function(){colleges.draw(d3.select(this).attr('state'), score_type)})
+		.on('click', function(d){
+			d3.selectAll('.selected').classed('selected', false)
+			d3.select(this).classed('selected', true)
+			colleges.draw(d.n,d3.select(this).attr('state'), score_type)
+		})
 		.transition()
 		.duration(750)
 		.style('fill','white')
@@ -129,6 +134,8 @@
 		function mouseOut(){
 			d3.select("#tooltip").transition().duration(500).style("opacity", 0);      
 		}
+
+		d3.select(id).selectAll('*').remove()
 		
 		d3.select(id).selectAll(".state")
 			.data(uStatePaths)
@@ -138,11 +145,15 @@
 			.attr("d",function(d){ return d.d;})
 			.attr('state', function(d){return d.id;})
 			.style('fill','white')
+			.on('click', function(d){
+				d3.selectAll('.selected').classed('selected', false)
+				d3.select(this).classed('selected', true)
+				colleges.draw(d.n,d3.select(this).attr('state'),score_type)
+			})
 			.on("mouseover", mouseOver)
 			.on("mouseout", mouseOut)
-			.on('click', function(){colleges.draw(d3.select(this).attr('state'),score_type)})
 			.transition()
-			.duration(3000)
+			.duration(1000)
 			.style("fill",function(d){ 
 				var score = 0
 				try{

@@ -2,7 +2,7 @@
 
 	var colleges = {}
 
-	colleges.draw = function(state, score_type){
+	colleges.draw = function(state_name,state, score_type){
 		d3.json("http://infovis-nba.herokuapp.com/colleges/" + state, function(data){
 			college = data.sort(function(a,b){
 				return d3.ascending(a[score_type],b[score_type])
@@ -19,6 +19,12 @@
 
 			svg.selectAll("*").remove();
 
+			svg.append('text')
+			.text(state_name)
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			config.state_name = state_name
+
 			var g = svg.append("g") 
 			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -33,6 +39,10 @@
 	      	g.append("g")
 	        .attr("class", "y axis")
 	        .call(d3.axisLeft(y));
+
+	        d3.selectAll(".y .tick text").classed('university',true).on('click', function(){
+	        	players.draw(d3.select(this).text())
+	        })
 
 	        g.selectAll(".bar")
 	        .data(college)
@@ -75,38 +85,5 @@
 
 	}
 
-
-	/*
-	uStates.draw = function(id, data, toolTip){		
-
-		function mouseOver(d){
-			d3.select("#tooltip").transition().duration(200).style("opacity", .9);      
-			
-			d3.select("#tooltip").html(toolTip(d.n, data[d.id]))  
-				.style("left", (d3.event.pageX) + "px")     
-				.style("top", (d3.event.pageY - 28) + "px");
-		}
-		
-		function mouseOut(){
-			d3.select("#tooltip").transition().duration(500).style("opacity", 0);      
-		}
-		
-		d3.select(id).selectAll(".state")
-			.data(uStatePaths).enter().append("path").attr("class","state").attr("d",function(d){ return d.d;})
-			.style('fill','white')
-			.on("mouseover", mouseOver).on("mouseout", mouseOut)
-			.transition()
-			.duration(5000)
-			.style("fill",function(d){ 
-				var score = 0
-				try{
-					score = data[d.id].att_score
-				} catch(err) {
-					score = 0
-				}
-				return colorize(minScore(data,'att_score'), maxScore(data,'att_score'), score); 
-			});
-		
-	}*/
 	this.colleges=colleges;
 })();
