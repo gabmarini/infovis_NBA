@@ -8,7 +8,6 @@
 				return d3.ascending(a[score_type],b[score_type])
 			})
 
-			console.log(college, score_type)
 			config.actual_college = college
 		
 			var svg = d3.select("#bar-college"),
@@ -82,8 +81,21 @@
 			})
 			.style('fill', '#FFFFFF')
 		})
-
-
 	}
+
+
+	players.remove = function(){
+
+		d3.select('#bar-college')
+		.transition()
+		.duration(1000)
+		.style('opacity', 0)
+		.on('end', function(){
+			d3.select('#bar-college').selectAll('*').remove()
+			d3.select('#bar-college').style('opacity', 1)
+			config.actual_college = undefined
+		})
+	}
+
 	this.players=players;
 })();

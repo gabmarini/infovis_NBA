@@ -44,19 +44,22 @@
 
 	        d3.selectAll('.university')
 	        .attr('fill', function(d){
-	        	console.log(d3.select(this).text())
 	        	return d3.select(this).text() == config.actual_college ? 'red' : 'black'
 	        })
-	        .on('click', function(){
-	        	d3.selectAll(".university").attr('fill','black')
-	        	d3.select(this).attr('fill','red').classed('uni-selected', true)
-	        	players.draw(d3.select(this).text(), score_type)
-	        })
+	      
 
 	        g.selectAll(".bar")
 	        .data(college)
 	      	.enter()
 	      	.append("rect")
+	      	.on('click', function(d){
+	      		d3.selectAll(".university").attr('fill','black')
+	      		d3.selectAll('.university').filter(function(uni){
+	      			return uni == d.name
+	      		}).attr('fill', 'red').classed('uni-selected', true)
+	      		players.draw(d.name, score_type) //TODO: aggiungere un remove e redraw per rendere tutto più fluido
+
+	      	})
 	        .attr("class", "bar")
 	        .attr("x", 0)
 	        .attr("height", y.bandwidth())

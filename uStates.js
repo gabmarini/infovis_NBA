@@ -73,12 +73,14 @@
 
 	
 
+	
+
 	uStates.redraw = function(id, data, toolTip, score_type){
 
 		function colorize(min, max, value){
 			var scale = d3.scaleLinear().domain([min, max]).range(['#ffffff', config[score_type]]);  
-		return scale(value)
-	}
+			return scale(value)
+		}
 
 		function mouseOver(d){
 			d3.select("#tooltip").transition().duration(200).style("opacity", .9);      
@@ -92,15 +94,20 @@
 			d3.select("#tooltip").transition().duration(500).style("opacity", 0);      
 		}
 
+		function mouseClick(d){
+			d3.selectAll('.selected').classed('selected', false)
+			d3.select(this).classed('selected', true)
+			colleges.draw(d.n,d3.select(this).attr('state'), score_type)
+			players.remove()
+		}
+
+
+
 		d3.select(id).selectAll(".state")
 		.data(uStatePaths)
 		.on("mouseover", mouseOver)
 		.on("mouseout", mouseOut)
-		.on('click', function(d){
-			d3.selectAll('.selected').classed('selected', false)
-			d3.select(this).classed('selected', true)
-			colleges.draw(d.n,d3.select(this).attr('state'), score_type)
-		})
+		.on('click', mouseClick)
 		.transition()
 		.duration(750)
 		.style('fill','white')
@@ -135,6 +142,13 @@
 			d3.select("#tooltip").transition().duration(500).style("opacity", 0);      
 		}
 
+		function mouseClick(d){
+			d3.selectAll('.selected').classed('selected', false)
+			d3.select(this).classed('selected', true)
+			colleges.draw(d.n,d3.select(this).attr('state'), score_type)
+			players.remove()
+		}
+
 		d3.select(id).selectAll('*').remove()
 		
 		d3.select(id).selectAll(".state")
@@ -145,11 +159,7 @@
 			.attr("d",function(d){ return d.d;})
 			.attr('state', function(d){return d.id;})
 			.style('fill','white')
-			.on('click', function(d){
-				d3.selectAll('.selected').classed('selected', false)
-				d3.select(this).classed('selected', true)
-				colleges.draw(d.n,d3.select(this).attr('state'),score_type)
-			})
+			.on('click', mouseClick)
 			.on("mouseover", mouseOver)
 			.on("mouseout", mouseOut)
 			.transition()
