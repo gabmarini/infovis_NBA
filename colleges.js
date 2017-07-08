@@ -29,7 +29,7 @@
 			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 			x.domain([0, d3.max(college, function(d) { return d[score_type]; })]);
-	    	y.domain(college.map(function(d) { return d.name; })).padding(0.2);
+	    	y.domain(college.map(function(d) { return d.name; })).padding(0.1);
 
 	    	g.append("g")
 	        .attr("class", "x axis")
@@ -40,8 +40,17 @@
 	        .attr("class", "y axis")
 	        .call(d3.axisLeft(y));
 
-	        d3.selectAll(".y .tick text").classed('university',true).on('click', function(){
-	        	players.draw(d3.select(this).text())
+	        d3.selectAll('#bar-state g .y .tick text').classed('university', true)
+
+	        d3.selectAll('.university')
+	        .attr('fill', function(d){
+	        	console.log(d3.select(this).text())
+	        	return d3.select(this).text() == config.actual_college ? 'red' : 'black'
+	        })
+	        .on('click', function(){
+	        	d3.selectAll(".university").attr('fill','black')
+	        	d3.select(this).attr('fill','red').classed('uni-selected', true)
+	        	players.draw(d3.select(this).text(), score_type)
 	        })
 
 	        g.selectAll(".bar")
@@ -54,7 +63,7 @@
 	        .attr("y", function(d) { return y(d.name); })
 	        .style('fill', config[score_type])
 	        .transition()
-	        .duration(3000)
+	        .duration(1500)
 	        .attr("width", function(d) { return x(d[score_type]); })
 
 			g.selectAll('.label')
@@ -66,10 +75,10 @@
 				return text
 			})
 			.attr('y', function(d,i){ 
-				return y(d.name) + margin.top + d3.select('rect').node().getBBox().height/2 - 8; 
+				return y(d.name) + margin.top + y.bandwidth()/2 - 8; 
 			})
 			.transition()
-			.duration(3000)
+			.duration(1500)
 			.attr('x', function(d) {
 				var pos = x(d[score_type]) - d3.select(this).node().getBBox().width - 5
 				if (pos <= 1){
