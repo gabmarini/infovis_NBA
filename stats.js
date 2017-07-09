@@ -1,4 +1,6 @@
-/*fare un metodo per cambiare i colori dei nodi a seconda dello score corrente*/
+/*fare un metodo per cambiare i colori dei nodi a seconda dello score corrente
+mappatura etichette statistiche + orinare statistiche per nome
+*/
 
 (function () {
 
@@ -30,9 +32,7 @@
 				new_data = {}
 				new_data.value = data.player_id
 				new_data.children = []
-				//console.log(new_data, data.seasons)
 				data.seasons.forEach(function(season){
-					//console.log(season)
 					stats = []
 					season.stats.forEach(function(stat){
 						stats.push({'value': Object.keys(stat)[0] + ': ' + stat[Object.keys(stat)[0]], 'label': Object.keys(stat)[0]})
@@ -45,7 +45,12 @@
 			data = d3TransformTree(data)
 			
 
-			treeData = data
+			data.children = data.children.sort(function(a,b){
+				return d3.ascending(a.value,b.value)
+			})
+
+			//sortare anche i figli all'interno della singola stagione
+			console.log(data)
 
 			// Set the dimensions and margins of the tree
 			var margin = {
@@ -70,7 +75,7 @@
 			var treemap = d3.tree().size([height, width]);
 
 			// Assigns parent, children, height, depth
-			root = d3.hierarchy(treeData, function (d) {
+			root = d3.hierarchy(data, function (d) {
 				return d.children
 			});
 			root.x0 = height / 2;
@@ -93,11 +98,11 @@
 			function update(source) {
 
 				// Assigns the x and y position for the nodes
-				var treeData = treemap(root);
+				var data = treemap(root);
 
 				// Compute the new tree layout.
-				var nodes = treeData.descendants(),
-					links = treeData.descendants().slice(1);
+				var nodes = data.descendants(),
+					links = data.descendants().slice(1);
 
 				// Normalize for fixed-depth.
 				nodes.forEach(function (d) {
