@@ -1,9 +1,10 @@
+/*fare un metodo per cambiare i colori dei nodi a seconda dello score corrente*/
+
 (function () {
 
 	var stats = {}
 
 	stats.draw = function (player) {
-		console.log(player)
 
 		d3.json("http://infovis-nba.herokuapp.com/players/" + player, function (data) {
 
@@ -25,17 +26,36 @@
 				]
 			};
 
+			function d3TransformTree(data) {
+				new_data = {}
+				new_data.value = data.player_id
+				new_data.children = []
+				//console.log(new_data, data.seasons)
+				data.seasons.forEach(function(season){
+					//console.log(season)
+					stats = []
+					season.stats.forEach(function(stat){
+						stats.push({'value': Object.keys(stat)[0] + ': ' + stat[Object.keys(stat)[0]], 'label': Object.keys(stat)[0]})
+					})
+					new_data.children.push({'value': season.season, 'children': stats})
+				})
+				return new_data
+			}
+
+			data = d3TransformTree(data)
+			
+
 			treeData = data
 
 			// Set the dimensions and margins of the tree
 			var margin = {
-					top: 20,
+					top: 10,
 					right: 15,
-					bottom: 30,
-					left: 15
+					bottom: 10,
+					left: 100
 				},
-				width = 960 - margin.left - margin.right,
-				height = 600 - margin.top - margin.bottom;
+				width = 950 - margin.left - margin.right,
+				height = 1100 - margin.top - margin.bottom;
 
 			var svg = d3.select("#stat-tree")
 				.append("g")
@@ -51,7 +71,7 @@
 
 			// Assigns parent, children, height, depth
 			root = d3.hierarchy(treeData, function (d) {
-				return d.seasons ? d.seasons : d.stats
+				return d.children
 			});
 			root.x0 = height / 2;
 			root.y0 = 0;
@@ -104,9 +124,18 @@
 				nodeEnter.append('circle')
 					.attr('class', 'node')
 					.attr('r', 1e-6)
+					.on('mouseover', function(d){
+					})
+					.on('mouseout', function(d){
+					})
 					.style("fill", function (d) {
-						return d._children ? "lightsteelblue" : "#fff";
+						return d.data.label == config.actual_stat && config.actual_stat != undefined ? 'red' : (d._children ? config[config.score_type] : "#fff");
+					})
+					.classed('leaf', function(d){
+						return ((d.children || d._children) && !d.data.label) ? false : true
 					});
+
+
 
 				// Add labels for the nodes
 				nodeEnter.append('text')
@@ -117,9 +146,13 @@
 					.attr("text-anchor", function (d) {
 						return d.children || d._children ? "end" : "start";
 					})
+					.style('fill', function(d){
+						return d.data.label == config.actual_stat && config.actual_stat != undefined ? 'red' : 'black';
+					})
 					.text(function (d) {
-						return d.data.season ? d.data.season : d.data.points; //da ricontrollare
+						return d.data.value
 					});
+
 
 				// UPDATE
 				var nodeUpdate = nodeEnter.merge(node);
@@ -135,9 +168,34 @@
 				nodeUpdate.select('circle.node')
 					.attr('r', 10)
 					.style("fill", function (d) {
-						return d._children ? "lightsteelblue" : "#fff";
+						return (d.data.label == config.actual_stat && config.actual_stat != undefined) ? 'red' : (d._children ? config[config.score_type] : "#fff");
 					})
 					.attr('cursor', 'pointer');
+
+
+
+				/*
+				nodeUpdate.selectAll('.leaf')
+					.on('click', function(d){
+						d3.selectAll('.node text').style('fill', function(text){
+							if(d.data.label == text.data.label && d.data.label != undefined) {
+								return 'red'
+							}
+							else {
+								return 'black'
+							}
+						})
+					})
+				*/
+
+				d3.selectAll('.leaf')
+				.on('click', function(d){
+					config.actual_stat = d.data.label
+					d3.selectAll('.node text')
+					.style('fill', function(text){
+						return text.data.label == config.actual_stat && config.actual_stat != undefined ? 'red' : 'black'
+					})
+				})
 
 
 				// Remove any exiting nodes
