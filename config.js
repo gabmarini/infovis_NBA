@@ -1,4 +1,4 @@
-(function(){
+(function () {
 
 	var config = {
 		"aro_score": "#506D7D",
