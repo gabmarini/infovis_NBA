@@ -9,6 +9,7 @@
 			})
 
 			config.actual_college = college
+			//config.actual_player = undefined
 
 			var svg = d3.select("#bar-college"),
 				margin = {
@@ -53,9 +54,7 @@
 				.attr("class", "y axis")
 				.call(d3.axisLeft(y));
 
-			d3.selectAll("#bar-college g .y .tick text").classed('player', true).on('click', function () {
-
-			})
+			d3.selectAll("#bar-college g .y .tick text").classed('player', true)
 
 			g.selectAll(".bar")
 				.data(player)
@@ -65,19 +64,31 @@
 				.attr('data-player', function (d) {
 					return d.player_id
 				})
+				.attr('data-name', function(d){
+					return d.name
+				})
 				.attr("x", 0)
 				.attr("height", y.bandwidth())
 				.attr("y", function (d) {
 					return y(d.name);
 				})
 				.on('click', function (d) {
-					stats.draw(d.player_id)
+					stats.remove()
+					stats.draw(d.player_id, d.name)
+					config.actual_player = d.name
+					d3.selectAll('.player').style('fill', function(text){
+						return text == d.name ? 'red' : 'black'
+					})
 				})
 				.style('fill', config[score_type])
 				.transition()
 				.duration(1500)
 				.attr("width", function (d) {
 					return x(d[score_type]);
+				})
+
+			g.selectAll('.player').style('fill', function(text){
+					return text == config.actual_player ? 'red' : 'black'
 				})
 
 			g.selectAll('.label')
@@ -101,6 +112,8 @@
 					return pos;
 				})
 				.style('fill', '#FFFFFF')
+
+
 		})
 	}
 

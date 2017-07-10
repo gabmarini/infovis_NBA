@@ -8,7 +8,7 @@
 		"def_score": "#F07D65",
 		"two_score": "#5C547D",
 		"thr_score": "#BA9C68",
-		"score": "#F0A2B0"
+		"score": "#F0A2B0",
 
 	}
 

@@ -6,36 +6,42 @@ mappatura etichette statistiche + orinare statistiche per nome
 
 	var stats = {}
 
-	stats.draw = function (player) {
+	stats.remove = function(){
 
-		d3.json("http://infovis-nba.herokuapp.com/players/" + player, function (data) {
+		
+		d3.select("#stat-tree")
+		.selectAll('*')
+		.remove()
 
-			var treeData = {
-				"name": "Top Level",
-				"children": [{
-						"name": "Level 2: A",
-						"children": [{
-								"name": "Son of A"
-							},
-							{
-								"name": "Daughter of A"
-							}
-						]
-					},
-					{
-						"name": "Level 2: B"
-					}
-				]
-			};
+
+	}
+
+	stats.restyle = function(){
+		d3.selectAll('circle')
+		.transition()
+		.duration(500)
+		.style('fill-opacity',0)
+		.transition()
+		.duration(500)
+		.style('fill', function(){
+			var color = d3.select(this).style('fill')
+			return (color != 'red' && color != 'white') ? config[config.score_type] : color
+		})
+		.style('fill-opacity', 1)
+	}
+
+	stats.draw = function (player_id, player_name) {
+
+		d3.json("http://infovis-nba.herokuapp.com/players/" + player_id, function (data) {
 
 			function d3TransformTree(data) {
 				new_data = {}
-				new_data.value = data.player_id
+				new_data.value = player_name
 				new_data.children = []
 				data.seasons.forEach(function(season){
 					stats = []
 					season.stats.forEach(function(stat){
-						stats.push({'value': Object.keys(stat)[0] + ': ' + stat[Object.keys(stat)[0]], 'label': Object.keys(stat)[0]})
+						stats.push({'value': Object.keys(stat)[0].replace(/_/g,' ') + ': ' + d3.format('.2f')(stat[Object.keys(stat)[0]]), 'label': Object.keys(stat)[0]})
 					})
 					new_data.children.push({'value': season.season, 'children': stats})
 				})
@@ -49,8 +55,13 @@ mappatura etichette statistiche + orinare statistiche per nome
 				return d3.ascending(a.value,b.value)
 			})
 
-			//sortare anche i figli all'interno della singola stagione
-			console.log(data)
+			data.children.forEach(function(c){
+				c.children.sort(function(a,b){
+					return d3.ascending(a.value,b.value)
+				})
+			})
+
+			//TODO: sortare anche i figli all'interno della singola stagione
 
 			// Set the dimensions and margins of the tree
 			var margin = {
@@ -65,7 +76,7 @@ mappatura etichette statistiche + orinare statistiche per nome
 			var svg = d3.select("#stat-tree")
 				.append("g")
 				.attr("transform", "translate(" +
-					margin.left + "," + margin.top + ")");
+					margin.left*2 + "," + margin.top + ")");
 
 			var i = 0,
 				duration = 750,
@@ -134,7 +145,7 @@ mappatura etichette statistiche + orinare statistiche per nome
 					.on('mouseout', function(d){
 					})
 					.style("fill", function (d) {
-						return d.data.label == config.actual_stat && config.actual_stat != undefined ? 'red' : (d._children ? config[config.score_type] : "#fff");
+						return d.data.label == config.actual_stat && config.actual_stat != undefined ? 'red' : (d._children ? config[config.score_type] : "white");
 					})
 					.classed('leaf', function(d){
 						return ((d.children || d._children) && !d.data.label) ? false : true
@@ -171,27 +182,12 @@ mappatura etichette statistiche + orinare statistiche per nome
 
 				// Update the node attributes and style
 				nodeUpdate.select('circle.node')
-					.attr('r', 10)
+					.attr('r', 5)
 					.style("fill", function (d) {
-						return (d.data.label == config.actual_stat && config.actual_stat != undefined) ? 'red' : (d._children ? config[config.score_type] : "#fff");
+						return (d.data.label == config.actual_stat && config.actual_stat != undefined) ? 'red' : (d._children ? config[config.score_type] : "white");
 					})
 					.attr('cursor', 'pointer');
 
-
-
-				/*
-				nodeUpdate.selectAll('.leaf')
-					.on('click', function(d){
-						d3.selectAll('.node text').style('fill', function(text){
-							if(d.data.label == text.data.label && d.data.label != undefined) {
-								return 'red'
-							}
-							else {
-								return 'black'
-							}
-						})
-					})
-				*/
 
 				d3.selectAll('.leaf')
 				.on('click', function(d){

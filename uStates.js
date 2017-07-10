@@ -258,6 +258,8 @@
 
 	var uStates = {};
 
+	uStates.uStatePaths = uStatePaths
+
 	function maxScore(data, scoreType) {
 		var scores = []
 		for (var d in data) {
@@ -302,6 +304,7 @@
 			d3.select(this).classed('selected', true)
 			colleges.draw(d.n, d3.select(this).attr('state'), score_type)
 			players.remove()
+			stats.remove()
 		}
 
 
@@ -350,6 +353,7 @@
 			d3.select(this).classed('selected', true)
 			colleges.draw(d.n, d3.select(this).attr('state'), score_type)
 			players.remove()
+			stats.remove()
 		}
 
 		d3.select(id).selectAll('*').remove()

@@ -68,7 +68,8 @@
 					d3.selectAll('.university').filter(function (uni) {
 						return uni == d.name
 					}).attr('fill', 'red').classed('uni-selected', true)
-					players.draw(d.name, score_type) //TODO: aggiungere un remove e redraw per rendere tutto più fluido
+					players.draw(d.name, score_type) 
+					stats.remove()
 
 				})
 				.attr("class", "bar")
