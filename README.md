@@ -47,3 +47,20 @@ Per navigare attraverso la visualizzazione è possibile utilizzare:
 - il tasto "p" per visualizzare le statistiche di un particolare giocatore. (KeyCode 80)
 - il tasto "h" per avere un aiuto, simile a questa lista, riguardo la navigazione. (KeyCode 72)
 
+### Giocatori
+
+Di seguito alcuni nomi di giocatori che possono essere inseriti nell'apposita casella per essere ricercati:
+
+- Kobe Bryant
+- Tim Duncan
+- Wilt Chamberlain
+- LeBron James
+- Kevin Durant
+- Derrick Rose
+- Danilo Gallinari
+- Luke Walton
+- Steve Nash
+- Kareem Abdul-Jabbar
+- Bill Russel
+- Michael Jordan
+
