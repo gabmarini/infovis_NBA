@@ -5,6 +5,30 @@
 
 	var keyCodes = [49, 50, 51, 52, 53, 54, 55, 56]
 
+	help.activatePlayerSelector = function(){
+		d3.select('#name-query').on('input', function(){
+			if(this.value.length >= 3){
+				var selector = d3.select('#player-selection')
+				selector.selectAll('*').remove()
+				d3.json('http://infovis-nba.herokuapp.com/players/list/' + this.value, function(data){
+					data.forEach(function(d){
+						selector.append('option').text(function(){
+							return d.name
+						})
+					})
+					d3.selectAll('#player-selection')
+					.on('click',function(){
+						d3.select('#name-query').node().value = this.value
+					})
+					.on('change', function(){
+						d3.select('#name-query').node().value = this.value
+					})
+				})
+			}
+		})
+
+	}
+
 	help.setCategory = function(){
 
 		var panel = d3.select('.actual-category')
@@ -64,14 +88,13 @@
 							  group.append('b').text('Questo giocatore non ha frequentato un college').classed('no-college', true)
 							  d3.selectAll('.state').filter('.selected').classed('selected', false)
 							  players.remove()
-							  console.log('remove')
 							  colleges.remove()
 
 						}
 
 
-
 					d3.json('http://infovis-nba.herokuapp.com/players/' + player_info.player_id, function(statistics){
+
 
 						stats.remove()
 						stats.draw(player_info.player_id, player_info.name)
@@ -96,7 +119,7 @@
 					})
 				  } else {
 						d3.select('.no-player').remove()
-						d3.select('.modal-body').append('p').text('Nessun giocatore trovato con questo nome').classed('no-player',true)
+						d3.select('#player-modal .modal-body').append('p').text('Nessun giocatore trovato con questo nome').classed('no-player',true)
 						d3.select('#score-group').style('display', 'none')
 
 

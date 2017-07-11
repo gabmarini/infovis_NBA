@@ -23,6 +23,8 @@ Le categorie di giocatori individuate sono:
 - "attaccanti", giocatori capaci di segnare svariate volte con alta efficienza
 - "rimbalzisti", giocatori capaci di catturare sia rimbalzi difensivi che offensivi
 
+I numeri legati agli score possono sembrare incongruenti, infatti la somma dei punteggi dei giocatori di un college non risulta essere uguale al punteggio del college stesso, questo perché gli scores sono stati calcolati solamente all'interno di una particolare categoria. I risultati sono stati poi normalizzati tra 0 e 100 per omogeneizzare tutti gli scores, rendendoli di fatto sommabili inter-categoria in maniera congruente. Dunque gli scores presenti nella visualizzazione sono congruenti solamente all'interno della categoria analizzata e solamente all'interno della particolare granularità (stati/colleges/giocatori). A valle di questi aggiustamenti, il ranking rimane congruente, questo perché le operazioni effettuate sono servite solo a scalare i risultati in maniera da renderli sommabili, di fatto dando ad ogni categoria lo stesso peso delle altre.
+
 ## Le tecnologie
 
 Per sviluppare la visualizzazione sono state utilizzate delle API online supportate da MongoDB, a causa di questo la visualizzazione può essere utilizzata solamente se si è connessi ad internet. Si è scelto di utilizzare delle API online per sgravare il fruitore della visualizzazione dal setup di server web e database, complicato a causa della natura Big Data dei dati.

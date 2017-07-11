@@ -58,7 +58,9 @@
 			</div>
 			<div class="modal-body">
 				<p>Inserisci nome e cognome di un giocatore per mostrare le sue statistiche</p>
-				<input id="name-query" type="text" name="player-name"d>
+				<input id="name-query" type="text" name="player-name">
+				<select id="player-selection">
+				</select>
 				<div id="score-group">
 					<p>Punteggio classe "attaccanti": <b score_type="att_score" ></b></p>
 					<p>Punteggio classe "difensori": <b score_type="def_score"></b></p>
@@ -158,6 +160,7 @@
 			config.score_type = 'score'
 			help.setCategory()
 			help.setClickHandler()
+			help.activatePlayerSelector()
 
 		})
 
