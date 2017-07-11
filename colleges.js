@@ -108,10 +108,18 @@
 				.style('fill', '#FFFFFF')
 
 		})
-
-
-
 	}
 
+	colleges.remove = function(){
+			d3.select('#bar-state')
+			.transition()
+			.duration(1000)
+			.style('opacity', 0)
+			.on('end', function () {
+				d3.select('#bar-state').selectAll('*').remove()
+				d3.select('#bar-state').style('opacity', 1)
+				config.actual_state = undefined
+			})
+	}
 	this.colleges = colleges;
 })();

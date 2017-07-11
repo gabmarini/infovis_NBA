@@ -16,7 +16,7 @@
 					top: 15,
 					right: 15,
 					bottom: 15,
-					left: 130
+					left: 140
 				},
 				width = 950 - margin.right - margin.left,
 				height = 20 * player.length + 20 - margin.top - margin.bottom;

@@ -1,308 +1,235 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
-  .state {
-    fill: none;
-    stroke: #a9a9a9;
-    stroke-width: 1;
-  }
-
-  .selected {
-    stroke: #000000;
-    stroke-width: 3;
-    z-index: 2;
-  }
-
-  .state:hover {
-    fill-opacity: 0.5;
-  }
-
-  #tooltip {
-    position: absolute;
-    text-align: center;
-    padding: 20px;
-    margin: 10px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 1px;
-    border-radius: 2px;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  #tooltip h4 {
-    margin: 0;
-    font-size: 14px;
-  }
-
-  #tooltip {
-    background: rgba(0, 0, 0, 0.9);
-    border: 1px solid grey;
-    border-radius: 5px;
-    font-size: 12px;
-    width: auto;
-    padding: 4px;
-    color: white;
-    opacity: 0;
-  }
-
-  #tooltip table {
-    table-layout: fixed;
-  }
-
-  #tooltip tr td {
-    padding: 0;
-    margin: 0;
-  }
-
-  #tooltip tr td:nth-child(1) {
-    width: 50px;
-  }
-
-  #tooltip tr td:nth-child(2) {
-    text-align: center;
-  }
-
-  .test {
-    float: right;
-    width: 50%;
-    height: 100%;
-    z-index: 20;
-  }
-
-  .state-div {
-    float: left;
-    width: 50%;
-    height: 50%;
-  }
-
-  .college-div {
-    height: 100vh;
-    width: 50%;
-    float: left;
-    max-height: 100%;
-  }
-
-  .player-div {
-    height: 50%;
-    width: 50%;
-    float: right;
-  }
-
-  .bar:hover {
-    fill-opacity: 0.7;
-  }
-
-  .axis path,
-  .axis line {
-    fill: none;
-    stroke: #D4D8DA;
-    stroke-width: 1px;
-    shape-rendering: crispEdges;
-  }
-
-  .tick text {
-    font-size: 11.5px;
-  }
-
-  .x path {
-    display: none;
-  }
-
-  .pre-scrollable-my {
-    max-height: 100%;
-    overflow-y: scroll;
-  }
-
-  .node circle {
-    fill: #fff;
-    stroke: #b0c4de;
-    stroke-width: 3px;
-  }
-
-  .node text {
-    font: 12px sans-serif;
-  }
-
-  .link {
-    fill: none;
-    stroke: #ccc;
-    stroke-width: 2px;
-  }
-
-  circle.node:hover {
-    fill-opacity: 0.5;
-  }
-</style>
+<link rel="stylesheet" type="text/css" href="style.css">
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-  crossorigin="anonymous">
+	crossorigin="anonymous">
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-  crossorigin="anonymous">
+	crossorigin="anonymous">
 
 <body width="100%" height="100%">
 
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Find a Player</h4>
-      </div>
-      <div class="modal-body">
-        <p>Insert the name of a player to show all his stats</p>
-        <input id="name-query" type="text" name="player-name"d>
-      </div>
-      <div class="modal-footer">
-        <button id="search-button" type="button" class="btn btn-default" data-dismiss="modal">Find</button>
-      </div>
-    </div>
-
-  </div>
+<div class="panel panel-default current-category">
+  <div class="panel-body actual-category"></div>
 </div>
-  <div id="tooltip"></div>
-  <!-- div to hold tooltip. -->
 
-  <div class="state-div">
-    <svg viewBox="0 0 950 600" width="100%" height="100%" id="statesvg"></svg>
-  </div>
-  <div class="test">
-    <svg viewBox="0 0 950 600" width="100%" height="100%" id="bar-state"></svg>
-  </div>
-  <div class="college-div">
-    <div class="pre-scrollable-my">
-      <svg viewBox="0 0 950 1000" width="100%" height="100%" id="bar-college"></svg>
-    </div>
-  </div>
-  <div class="player-div">
-    <svg viewBox="0 0 950 1100" width="100%" height="100%" id="stat-tree"></svg>
+<div id="help-modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
 
-  </div>
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Aiuto</h4>
+			</div>
+			<div class="modal-body">
+				<p>Di seguito i tasti da premere per cambiare categoria</p>
+				<ul class="category-list">
+					<li>1: categoria "plus/minus"</li>
+					<li>2: categoria "all-around"</li>
+					<li>3: categoria "tiratori da 2 punti"</li>
+					<li>4: categoria "tiratori da 3 punti"</li>
+					<li>5: categoria "difensori"</li>
+					<li>6: categoria "attaccanti"</li>
+					<li>7: categoria "rimbalzisti"</li>
+					<li class="visualized">8: categoria "score generale"</li>
+				</ul>
+				<p>Per ricercare un giocatore premere il tasto "p"</p>
+			</div>
+			<div class="modal-footer">
+				<button id="dismiss-modal" type="button" class="btn btn-success" data-dismiss="modal">Chiudi</button>
+			</div>
+		</div>
 
-  
-  <!-- creates uStates. -->
-  <script src="http://d3js.org/d3.v4.min.js"></script>
-  <!-- jQuery library -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
+	</div>
+</div>
 
-  <script src="config.js"></script>
-  <script src="stats.js"></script>
-  <script src="players.js"></script>
-  <script src="colleges.js"></script>
-  <script src="uStates.js"></script>
-  <script src="help.js"></script>
+<!-- Modal -->
+<div id="player-modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
 
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Mostra un giocatore</h4>
+			</div>
+			<div class="modal-body">
+				<p>Inserisci nome e cognome di un giocatore per mostrare le sue statistiche</p>
+				<input id="name-query" type="text" name="player-name"d>
+				<div id="score-group">
+					<p>Punteggio classe "attaccanti": <b score_type="att_score" ></b></p>
+					<p>Punteggio classe "difensori": <b score_type="def_score"></b></p>
+					<p>Punteggio classe "rimbalzisti": <b score_type="reb_score"></b></p>
+					<p>Punteggio classe "plus/minus": <b score_type="plm_score"></b></p>
+					<p>Punteggio classe "all-arounder": <b score_type="aro_score"></b></p>
+					<p>Punteggio classe "tiratori da 2": <b score_type="two_score"></b></p>
+					<p>Punteggio classe "tiratori da 3": <b score_type="thr_score"></b></p>
+					<p>Punteggio complessivo: <b score_type="score"></b></p>
+					<p>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="dismiss-modal" type="button" class="btn btn-success" data-dismiss="modal">Chiudi</button>
+				<button id="search-button" type="button" class="btn btn-default">Cerca</button>
+			</div>
+		</div>
 
-    <script type="text/javascript">
-    
-    $(document).keydown(function(evt){
-    if (evt.keyCode==80 ){
-        evt.preventDefault();
-        $('#myModal').modal('show');
-    }
+	</div>
+</div>
+	<div id="tooltip"></div>
+	<!-- div to hold tooltip. -->
 
-    $('#myModal').on('shown.bs.modal', function () {
-      $('#name-query').focus();
-    }) 
+	<div class="state-div">
+		<svg viewBox="0 0 950 600" width="100%" height="100%" id="statesvg"></svg>
+	</div>
+	<div class="test">
+		<svg viewBox="0 0 950 600" width="100%" height="100%" id="bar-state"></svg>
+	</div>
+	<div class="college-div">
+		<div class="pre-scrollable-my">
+			<svg viewBox="0 0 950 1000" width="100%" height="100%" id="bar-college"></svg>
+		</div>
+	</div>
+	<div class="player-div">
+		<svg viewBox="0 0 950 1100" width="100%" height="100%" id="stat-tree"></svg>
 
-    
-});
-  </script>
+	</div>
 
-  <script>
-    function tooltipHtml(n, d) { /* function to create html content string in tooltip div. */
-      return "<h4>" + n + "</h4>"
-      //"<h4>"+n+"</h4><table>"+
-      //"<tr><td>Low</td><td>"+(d.low)+"</td></tr>"+
-      //"<tr><td>Average</td><td>"+(d.avg)+"</td></tr>"+
-      //"<tr><td>High</td><td>"+(d.high)+"</td></tr>"+
-      //"</table>";
-    }
+	
+	<!-- creates uStates. -->
+	<script src="http://d3js.org/d3.v4.min.js"></script>
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+		crossorigin="anonymous"></script>
 
-    d3.json("http://infovis-nba.herokuapp.com/states", function (data) {
-      states = {}
-      data.forEach(function (state, i) {
-        states[state.state_abbreviation] = state
-      })
-      uStates.draw("#statesvg", states, tooltipHtml, 'score');
-      config.score_type = 'score'
-    })
-
-
-    d3.select('body').on('keydown', function () {
-      if (d3.event.keyCode == 49) {
-        uStates.redraw("#statesvg", states, tooltipHtml, 'plm_score')
-        if (config.actual_state != undefined)
-          score_type = 'plm_score'
-        config.score_type = 'plm_score'
-      }
-      if (d3.event.keyCode == 50) {
-        uStates.redraw("#statesvg", states, tooltipHtml, 'aro_score')
-        if (config.actual_state != undefined)
-          score_type = 'aro_score'
-
-        config.score_type = 'aro_score'
-      }
-      if (d3.event.keyCode == 51) {
-        uStates.redraw("#statesvg", states, tooltipHtml, 'two_score')
-        if (config.actual_state != undefined)
-          score_type = 'two_score'
-        config.score_type = 'two_score'
-      }
-      if (d3.event.keyCode == 52) {
-        uStates.redraw("#statesvg", states, tooltipHtml, 'thr_score')
-        if (config.actual_state != undefined)
-          score_type = 'thr_score'
-        config.score_type = 'thr_score'
-      }
-      if (d3.event.keyCode == 53) {
-        uStates.redraw("#statesvg", states, tooltipHtml, 'def_score')
-        if (config.actual_state != undefined)
-          score_type = 'def_score'
-        config.score_type = 'def_score'
-      }
-      if (d3.event.keyCode == 54) {
-        uStates.redraw("#statesvg", states, tooltipHtml, 'att_score')
-        if (config.actual_state != undefined)
-          score_type = 'att_score'
-        config.score_type = 'att_score'
-      }
-      if (d3.event.keyCode == 55) {
-        uStates.redraw("#statesvg", states, tooltipHtml, 'reb_score')
-        if (config.actual_state != undefined)
-          score_type = 'reb_score'
-        config.score_type = 'reb_score'
-      }
-      if (d3.event.keyCode == 56) {
-        uStates.redraw("#statesvg", states, tooltipHtml, 'score')
-        if (config.actual_state != undefined)
-          score_type = 'score'
-        config.score_type = 'score'
-      }
-      if ([49, 50, 51, 52, 53, 54, 55, 56].indexOf(d3.event.keyCode) > -1) {
-        config.last_pressed = d3.event.keyCode
-        colleges.draw(config.state_name, config.actual_state, score_type)
-        if (config.actual_college != undefined) {
-          players.draw(config.actual_college, score_type)
-        }
-        stats.restyle()
-
-      }
+	<script src="config.js"></script>
+	<script src="stats.js"></script>
+	<script src="players.js"></script>
+	<script src="colleges.js"></script>
+	<script src="uStates.js"></script>
+	<script src="help.js"></script>
 
 
+		<script type="text/javascript">
+		
+		
+		$(document).keydown(function(evt){
+			if (evt.keyCode==80 && !$('#player-modal').hasClass('in')){
+					evt.preventDefault();
+					$('#help-modal').modal('hide');
+					$('#player-modal').modal('show');
+			}
+		
+			if (evt.keyCode==72 && !$('#player-modal').hasClass('in')){
+					evt.preventDefault();
+					$('#player-modal').modal('hide');
+					$('#help-modal').modal('toggle');
+			}
+
+			$('#player-modal').on('shown.bs.modal', function () {
+				$('#name-query').focus();
+			}) 
+
+		
+		});
+	</script>
+
+	<script>
+		function tooltipHtml(n, d) { /* function to create html content string in tooltip div. */
+			return "<h4>" + n + "</h4>"
+			//"<h4>"+n+"</h4><table>"+
+			//"<tr><td>Low</td><td>"+(d.low)+"</td></tr>"+
+			//"<tr><td>Average</td><td>"+(d.avg)+"</td></tr>"+
+			//"<tr><td>High</td><td>"+(d.high)+"</td></tr>"+
+			//"</table>";
+		}
+
+		d3.json("http://infovis-nba.herokuapp.com/states", function (data) {
+			states = {}
+			data.forEach(function (state, i) {
+				states[state.state_abbreviation] = state
+			})
+			uStates.draw("#statesvg", states, tooltipHtml, 'score');
+			config.score_type = 'score'
+			help.setCategory()
+			help.setClickHandler()
+
+		})
 
 
-    })
+		d3.select('body').on('keydown', function () {
+			if (d3.event.keyCode == 49) {
+				uStates.redraw("#statesvg", states, tooltipHtml, 'plm_score')
+				if (config.actual_state != undefined)
+					score_type = 'plm_score'
+				config.score_type = 'plm_score'
+			}
+			if (d3.event.keyCode == 50) {
+				uStates.redraw("#statesvg", states, tooltipHtml, 'aro_score')
+				if (config.actual_state != undefined)
+					score_type = 'aro_score'
 
-    d3.select(self.frameElement).style("height", "600px");
-  </script>
+				config.score_type = 'aro_score'
+			}
+			if (d3.event.keyCode == 51) {
+				uStates.redraw("#statesvg", states, tooltipHtml, 'two_score')
+				if (config.actual_state != undefined)
+					score_type = 'two_score'
+				config.score_type = 'two_score'
+			}
+			if (d3.event.keyCode == 52) {
+				uStates.redraw("#statesvg", states, tooltipHtml, 'thr_score')
+				if (config.actual_state != undefined)
+					score_type = 'thr_score'
+				config.score_type = 'thr_score'
+			}
+			if (d3.event.keyCode == 53) {
+				uStates.redraw("#statesvg", states, tooltipHtml, 'def_score')
+				if (config.actual_state != undefined)
+					score_type = 'def_score'
+				config.score_type = 'def_score'
+			}
+			if (d3.event.keyCode == 54) {
+				uStates.redraw("#statesvg", states, tooltipHtml, 'att_score')
+				if (config.actual_state != undefined)
+					score_type = 'att_score'
+				config.score_type = 'att_score'
+			}
+			if (d3.event.keyCode == 55) {
+				uStates.redraw("#statesvg", states, tooltipHtml, 'reb_score')
+				if (config.actual_state != undefined)
+					score_type = 'reb_score'
+				config.score_type = 'reb_score'
+			}
+			if (d3.event.keyCode == 56) {
+				uStates.redraw("#statesvg", states, tooltipHtml, 'score')
+				if (config.actual_state != undefined)
+					score_type = 'score'
+				config.score_type = 'score'
+			}
+			if ([49, 50, 51, 52, 53, 54, 55, 56].indexOf(d3.event.keyCode) > -1) {
+				config.last_pressed = d3.event.keyCode
+				help.changeCategory()
+				if(config.score_type != undefined && config.actual_state != undefined)
+					colleges.draw(config.state_name, config.actual_state, config.score_type)
+				if (config.actual_college != undefined) {
+					players.draw(config.actual_college, score_type)
+				}
+				stats.restyle()
+
+			}
+
+
+
+
+		})
+
+		d3.select(self.frameElement).style("height", "600px");
+	</script>
 
 </body>
