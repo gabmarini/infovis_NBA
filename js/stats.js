@@ -57,8 +57,6 @@
 				})
 			})
 
-			//TODO: sortare anche i figli all'interno della singola stagione
-
 			// Set the dimensions and margins of the tree
 			var margin = {
 					top: 10,

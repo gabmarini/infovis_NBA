@@ -9,7 +9,6 @@
 			})
 
 			config.actual_college = college
-			//config.actual_player = undefined
 
 			var svg = d3.select("#bar-college"),
 				margin = {
@@ -100,7 +99,7 @@
 					return text
 				})
 				.attr('y', function (d, i) {
-					return y(d.name) + margin.top + y.bandwidth() / 2 - 9; //prendere la rect dei player e non la rect dei college
+					return y(d.name) + margin.top + y.bandwidth() / 2 - 9;
 				})
 				.transition()
 				.duration(1500)
