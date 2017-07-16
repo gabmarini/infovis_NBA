@@ -60,7 +60,7 @@
 		text-align: center;
 	}
 
-	.test {
+	.state-particular-div {
 		float: right;
 		width: 50%;
 		height: 100%;
@@ -152,3 +152,17 @@
 	.panel-body {
 		text-align: center;
 	}
+
+	.js-loading-overlay {
+	  background-color: rgba(0,0,0,.5);
+	  width: 100%;
+	  height: 100%;
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	}
+
+	.visual-block{
+		border: 0.5px dashed #eeeeee;
+	}
+

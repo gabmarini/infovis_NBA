@@ -1,7 +1,3 @@
-/*fare un metodo per cambiare i colori dei nodi a seconda dello score corrente
-mappatura etichette statistiche + orinare statistiche per nome
-*/
-
 (function () {
 
 	var stats = {}
@@ -77,6 +73,14 @@ mappatura etichette statistiche + orinare statistiche per nome
 				.append("g")
 				.attr("transform", "translate(" +
 					margin.left*2 + "," + margin.top + ")");
+
+			svg.append('image')
+			.attr('xlink:href','https://d2cwpp38twqe55.cloudfront.net/req/201705301/images/players/'+player_id+'.png')
+			.attr('x',-margin.left*2)
+			.attr('y',-margin.top)
+			.attr('height',250)
+			.attr('width',190)
+
 
 			var i = 0,
 				duration = 750,
