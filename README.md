@@ -66,3 +66,10 @@ Di seguito alcuni nomi di giocatori che possono essere inseriti nell'apposita ca
 - Bill Russel
 - Michael Jordan
 
+### Esempio
+
+Di seguito un esempio di come la visualizzazione si presenta nel caso in cui si stia analizzando il profilo di Michael Jordan.
+
+![Esempio Michael Jordan](img/vis.png)
+
+
